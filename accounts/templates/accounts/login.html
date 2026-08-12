@@ -1,0 +1,20 @@
+{% extends "accounts/base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <h2>Welcome back</h2>
+    <p class="subtitle">Library Management System</p>
+    
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Log In</button>
+        <p class="footer-link"><a href="{% url 'password-reset-page' %}">Forgot password?</a></p>
+    </form>
+    
+
+    <p class="footer-link">New here? <a href="{% url 'register-page' %}">Create an account</a></p>
+    
+{% endblock %}

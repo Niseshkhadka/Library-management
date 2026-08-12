@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Library System{% endblock %}</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background-color: #F5EFE3;
+            color: #2E2620;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: #FFFDF9;
+            border: 1px solid #D9CBB0;
+            border-radius: 6px;
+            box-shadow: 0 4px 20px rgba(46, 38, 32, 0.08);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h2 {
+            font-size: 26px;
+            font-weight: 400;
+            color: #5C3A2E;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .subtitle {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 13px;
+            color: #8A7A63;
+            margin-bottom: 28px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        form p {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 13px;
+            color: #6B5D4D;
+            margin-bottom: 6px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #D9CBB0;
+            border-radius: 4px;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 14px;
+            background: #FCFAF5;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #A65D3F;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            background-color: #A65D3F;
+            color: #FFFDF9;
+            border: none;
+            border-radius: 4px;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+
+        button:hover {
+            background-color: #8B4B33;
+        }
+
+        .footer-link {
+            margin-top: 20px;
+            text-align: center;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 13px;
+            color: #8A7A63;
+        }
+
+        .footer-link a {
+            color: #A65D3F;
+            text-decoration: none;
+        }
+
+        .footer-link a:hover {
+            text-decoration: underline;
+        }
+
+        ul.errorlist {
+            list-style: none;
+            color: #B03A2E;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            font-size: 12px;
+            margin-top: -12px;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
