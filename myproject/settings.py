@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'rest_framework',
+    'catalog',
+    'django_filters'
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -139,4 +141,5 @@ MAILERS = {
     },
 }
 
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
