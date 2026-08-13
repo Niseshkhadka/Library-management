@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>My Reservations</h1>
+  <table>
+    <thead>
+      <tr><th>Book</th><th>Status</th><th>Queue position</th><th>Requested</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for row in reservations %}
+        <tr>
+          <td>{{ row.reservation.book.title }}</td>
+          <td>{{ row.reservation.get_status_display }}</td>
+          <td>{% if row.queue_position %}#{{ row.queue_position }}{% else %}-{% endif %}</td>
+          <td>{{ row.reservation.created_at }}</td>
+          <td>
+            {% if row.reservation.is_active %}
+              <form method="post" action="{% url 'reservations:cancel' row.reservation.pk %}">
+                {% csrf_token %}
+                <button type="submit">Cancel</button>
+              </form>
+            {% endif %}
+          </td>
+        </tr>
+      {% empty %}
+        <tr><td colspan="5">You have no reservations.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

@@ -1,0 +1,9 @@
+Hi {{ user.first_name|default:user.username }},
+
+Good news - "{{ book.title }}" is now available for you.
+
+We're holding a copy until {{ hold_expires_at }}. Please pick it up or check
+it out online before then, or your hold will expire and pass to the next
+person in the queue.
+
+- The Library
