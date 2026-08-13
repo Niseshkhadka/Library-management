@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import BookForm
 
+
 @login_required
 def add_book_page(request):
     if request.user.role not in ['LIBRARIAN', 'SUPERADMIN']:
@@ -23,9 +24,11 @@ def add_book_page(request):
 
     return render(request, 'catalog/add_book.html', {'form': form})
 
+
 def book_detail_page(request, pk):
     book = get_object_or_404(Book.objects.select_related('author', 'category'), pk=pk)
     return render(request, 'catalog/book_detail.html', {'book': book})
+
 
 class AuthorViewSet(viewsets.ModelViewSet):
     queryset = Author.objects.all()
@@ -60,10 +63,13 @@ class BookViewSet(viewsets.ModelViewSet):
             return [IsLibrarianOrSuperAdmin()]
         return [IsAuthenticatedOrReadOnly()]
 
+
 def book_list_page(request):
     books = Book.objects.select_related('author', 'category').all()
     return render(request, 'catalog/book_list.html', {'books': books})
 
+
 def book_detail_page(request, pk):
     book = get_object_or_404(Book.objects.select_related('author', 'category'), pk=pk)
     return render(request, 'catalog/book_detail.html', {'book': book})
+

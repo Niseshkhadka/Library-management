@@ -1,5 +1,5 @@
 """
-URL configuration for myproject project.
+URL configuration for circulation project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/6.1/topics/http/urls/
@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('accounts.urls')),
     path('api/', include('catalog.urls')),
+    path('circulation/', include('circulation_app.urls')),
 ]
 
 if settings.DEBUG:
