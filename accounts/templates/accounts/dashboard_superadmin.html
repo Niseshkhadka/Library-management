@@ -1,0 +1,17 @@
+{% extends "accounts/base.html" %}
+
+{% block title %}Super Admin Dashboard{% endblock %}
+
+{% block content %}
+    <h2>Welcome, {{ user.username }}</h2>
+    <p class="subtitle">Super Admin Dashboard</p>
+
+    <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #6B5D4D; margin-bottom: 24px;">
+        You have full control over the system — manage users, roles, books, and library operations.
+    </p>
+
+    <a href="{% url 'profile-page' %}"><button style="margin-bottom: 12px;">My Profile</button></a>
+    <a href="{% url 'admin:index' %}"><button style="background-color: #6B5D4D;">Manage Users (Admin Panel)</button></a>
+
+    <p class="footer-link"><a href="{% url 'logout-page' %}">Log out</a></p>
+{% endblock %}
