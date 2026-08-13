@@ -1,0 +1,25 @@
+{% extends "accounts/base.html" %}
+
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block content %}
+    <h2>{{ book.title }}</h2>
+    <p class="subtitle">by {{ book.author.name }}</p>
+
+    <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #6B5D4D; margin-bottom: 16px;">
+        {{ book.description }}
+    </p>
+
+    <p><strong>Category:</strong> {{ book.category.name }}</p>
+    <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+    <p><strong>Published:</strong> {{ book.published_date }}</p>
+    <p><strong>Copies:</strong>
+        {% if book.available_copies == 0 %}
+            <span style="background-color: #B00020; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px;">Unavailable</span>
+        {% else %}
+            {{ book.available_copies }} of {{ book.total_copies }} available
+        {% endif %}
+    </p>
+
+    <p class="footer-link" style="margin-top: 24px;"><a href="{% url 'book-list-page' %}">← Back to Book List</a></p>
+{% endblock %}
