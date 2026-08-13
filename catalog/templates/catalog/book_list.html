@@ -1,0 +1,32 @@
+{% extends "accounts/base.html" %}
+
+{% block title %}Book Catalog{% endblock %}
+
+{% block content %}
+    <h2>📚 Book Catalog</h2>
+    <p class="subtitle">Browse Available Books</p>
+
+    <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #6B5D4D; margin-bottom: 24px;">
+        Explore the full collection of books available in the library.
+    </p>
+
+    {% if user.role == 'LIBRARIAN' or user.role == 'SUPERADMIN' %}
+        <a href="{% url 'add-book-page' %}"><button style="margin-bottom: 20px;">+ Add Book</button></a>
+    {% endif %}
+
+    {% for book in books %}
+    <div style="border-bottom: 1px solid #ddd; padding: 12px 0; text-align: left;">
+        <strong><a href="{% url 'book-detail-page' book.pk %}" style="color: #6B5D4D;">{{ book.title }}</a></strong> by {{ book.author.name }}<br>
+        <small style="color: #6B5D4D;">{{ book.category.name }} · </small>
+        {% if book.available_copies == 0 %}
+            <span style="background-color: #B00020; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px;">Unavailable</span>
+        {% else %}
+            <small style="color: #6B5D4D;">{{ book.available_copies }} of {{ book.total_copies }} available</small>
+        {% endif %}
+    </div>
+    {% empty %}
+    <p>No books available yet.</p>
+    {% endfor %}
+
+    <p class="footer-link" style="margin-top: 24px;"><a href="{% url 'dashboard-page' %}">← Back to Dashboard</a></p>
+{% endblock %}

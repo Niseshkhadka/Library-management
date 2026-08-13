@@ -1,0 +1,16 @@
+{% extends "accounts/base.html" %}
+
+{% block title %}Add Book{% endblock %}
+
+{% block content %}
+    <h2>Add a New Book</h2>
+    <p class="subtitle">Librarian / Super Admin Only</p>
+
+    <form method="post" enctype="multipart/form-data" style="text-align: left;">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" style="margin-top: 12px;">Add Book</button>
+    </form>
+
+    <p class="footer-link" style="margin-top: 24px;"><a href="{% url 'book-list-page' %}">← Back to Book List</a></p>
+{% endblock %}
