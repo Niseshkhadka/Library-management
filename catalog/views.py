@@ -66,10 +66,41 @@ class BookViewSet(viewsets.ModelViewSet):
 
 def book_list_page(request):
     books = Book.objects.select_related('author', 'category').all()
-    return render(request, 'catalog/book_list.html', {'books': books})
-
-
-def book_detail_page(request, pk):
-    book = get_object_or_404(Book.objects.select_related('author', 'category'), pk=pk)
-    return render(request, 'catalog/book_detail.html', {'book': book})
+    
+    # Search functionality
+    search_query = request.GET.get('search', '')
+    if search_query:
+        books = books.filter(title__icontains=search_query) | books.filter(isbn__icontains=search_query)
+    
+    # Category filter
+    category_filter = request.GET.get('category', '')
+    if category_filter:
+        books = books.filter(category__id=category_filter)
+    
+    # Author filter
+    author_filter = request.GET.get('author', '')
+    if author_filter:
+        books = books.filter(author__id=author_filter)
+    
+    # Availability filter
+    availability_filter = request.GET.get('availability', '')
+    if availability_filter == 'available':
+        books = books.filter(available_copies__gt=0)
+    elif availability_filter == 'unavailable':
+        books = books.filter(available_copies=0)
+    
+    categories = Category.objects.all()
+    authors = Author.objects.all()
+    
+    context = {
+        'books': books,
+        'categories': categories,
+        'authors': authors,
+        'search_query': search_query,
+        'category_filter': category_filter,
+        'author_filter': author_filter,
+        'availability_filter': availability_filter,
+    }
+    
+    return render(request, 'catalog/book_list.html', context)
 

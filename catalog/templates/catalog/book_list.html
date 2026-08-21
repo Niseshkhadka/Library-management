@@ -6,27 +6,100 @@
     <h2>📚 Book Catalog</h2>
     <p class="subtitle">Browse Available Books</p>
 
-    <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #6B5D4D; margin-bottom: 24px;">
+    <p style="font-family: 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: #6B5D4D; margin-bottom: 20px;">
         Explore the full collection of books available in the library.
     </p>
 
+    <!-- Search and Filter Section -->
+    <form method="get" style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin-bottom: 24px; text-align: left;">
+        <div style="margin-bottom: 16px;">
+            <label for="search" style="display: block; margin-bottom: 6px; font-weight: bold; color: #6B5D4D;">🔍 Search by Title or ISBN</label>
+            <input type="text" id="search" name="search" placeholder="Enter book title or ISBN..." value="{{ search_query }}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+            <div>
+                <label for="category" style="display: block; margin-bottom: 6px; font-weight: bold; color: #6B5D4D;">Category</label>
+                <select id="category" name="category" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                    <option value="">-- All Categories --</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if category.id|stringformat:"s" == category_filter %}selected{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="author" style="display: block; margin-bottom: 6px; font-weight: bold; color: #6B5D4D;">Author</label>
+                <select id="author" name="author" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                    <option value="">-- All Authors --</option>
+                    {% for author in authors %}
+                        <option value="{{ author.id }}" {% if author.id|stringformat:"s" == author_filter %}selected{% endif %}>{{ author.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label for="availability" style="display: block; margin-bottom: 6px; font-weight: bold; color: #6B5D4D;">Availability</label>
+                <select id="availability" name="availability" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                    <option value="">-- All --</option>
+                    <option value="available" {% if availability_filter == 'available' %}selected{% endif %}>Available Only</option>
+                    <option value="unavailable" {% if availability_filter == 'unavailable' %}selected{% endif %}>Unavailable Only</option>
+                </select>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+            <button type="submit" style="background-color: #8B6F47; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">🔍 Search</button>
+            <a href="{% url 'book-list-page' %}" style="background-color: #ddd; color: #333; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; font-weight: bold;">Reset</a>
+        </div>
+    </form>
+
     {% if user.role == 'LIBRARIAN' or user.role == 'SUPERADMIN' %}
-        <a href="{% url 'add-book-page' %}"><button style="margin-bottom: 20px;">+ Add Book</button></a>
+        <a href="{% url 'add-book-page' %}"><button style="margin-bottom: 20px; background-color: #4CAF50; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer;">+ Add Book</button></a>
     {% endif %}
 
-    {% for book in books %}
-    <div style="border-bottom: 1px solid #ddd; padding: 12px 0; text-align: left;">
-        <strong><a href="{% url 'book-detail-page' book.pk %}" style="color: #6B5D4D;">{{ book.title }}</a></strong> by {{ book.author.name }}<br>
-        <small style="color: #6B5D4D;">{{ book.category.name }} · </small>
-        {% if book.available_copies == 0 %}
-            <span style="background-color: #B00020; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px;">Unavailable</span>
+    <!-- Books List -->
+    <div style="margin-top: 20px;">
+        {% if books %}
+            <p style="color: #6B5D4D; margin-bottom: 16px; font-size: 14px;"><strong>Results:</strong> {{ books|length }} book(s) found</p>
+            {% for book in books %}
+            <div style="border: 1px solid #e0e0e0; border-radius: 6px; padding: 16px; margin-bottom: 12px; text-align: left; background-color: #fafafa; hover-bg-color: #f0f0f0; transition: all 0.3s ease;">
+                <div style="display: flex; justify-content: space-between; align-items: start;">
+                    <div style="flex: 1;">
+                        <h4 style="margin: 0 0 8px 0; color: #6B5D4D;">
+                            <a href="{% url 'book-detail-page' book.pk %}" style="color: #8B6F47; text-decoration: none;">{{ book.title }}</a>
+                        </h4>
+                        <p style="margin: 4px 0; font-size: 14px; color: #7a7a7a;">
+                            <strong>Author:</strong> {{ book.author.name }}
+                        </p>
+                        <p style="margin: 4px 0; font-size: 14px; color: #7a7a7a;">
+                            <strong>Category:</strong> {{ book.category.name }}
+                        </p>
+                        <p style="margin: 4px 0; font-size: 14px; color: #7a7a7a;">
+                            <strong>ISBN:</strong> {{ book.isbn }}
+                        </p>
+                        {% if book.description %}
+                            <p style="margin: 8px 0 0 0; font-size: 13px; color: #666; font-style: italic;">{{ book.description|truncatewords:15 }}</p>
+                        {% endif %}
+                    </div>
+                    <div style="text-align: right; margin-left: 20px;">
+                        {% if book.available_copies == 0 %}
+                            <span style="background-color: #B00020; color: white; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; display: inline-block;">❌ Unavailable</span>
+                        {% else %}
+                            <span style="background-color: #4CAF50; color: white; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; display: inline-block;">✓ Available</span>
+                            <p style="margin: 8px 0 0 0; font-size: 12px; color: #4CAF50;">{{ book.available_copies }} of {{ book.total_copies }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         {% else %}
-            <small style="color: #6B5D4D;">{{ book.available_copies }} of {{ book.total_copies }} available</small>
+            <div style="background-color: #fff3cd; border: 1px solid #ffc107; padding: 16px; border-radius: 4px; text-align: center; color: #856404;">
+                <p>📭 No books found matching your search criteria.</p>
+                <a href="{% url 'book-list-page' %}" style="color: #0c5460; text-decoration: underline;">Clear filters</a>
+            </div>
         {% endif %}
     </div>
-    {% empty %}
-    <p>No books available yet.</p>
-    {% endfor %}
 
     <p class="footer-link" style="margin-top: 24px;"><a href="{% url 'dashboard-page' %}">← Back to Dashboard</a></p>
 {% endblock %}

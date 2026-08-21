@@ -3,14 +3,88 @@
 {% block title %}Add Book{% endblock %}
 
 {% block content %}
-    <h2>Add a New Book</h2>
+    <h2>📖 Add a New Book</h2>
     <p class="subtitle">Librarian / Super Admin Only</p>
 
-    <form method="post" enctype="multipart/form-data" style="text-align: left;">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" style="margin-top: 12px;">Add Book</button>
-    </form>
+    <div style="background-color: #f9f9f9; padding: 24px; border-radius: 8px; max-width: 600px; margin: 20px auto; text-align: left; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+                <div style="background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px; border-radius: 4px; margin-bottom: 20px;">
+                    {% for error in form.non_field_errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
 
-    <p class="footer-link" style="margin-top: 24px;"><a href="{% url 'book-list-page' %}">← Back to Book List</a></p>
+            {% for field in form %}
+                <div style="margin-bottom: 16px;">
+                    <label for="{{ field.id_for_label }}" style="display: block; margin-bottom: 6px; font-weight: bold; color: #6B5D4D;">
+                        {{ field.label }}
+                        {% if field.field.required %}<span style="color: #B00020;">*</span>{% endif %}
+                    </label>
+                    
+                    {% if field.field.widget.input_type == 'textarea' %}
+                        {% if field.errors %}
+                            {{ field }}
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
+                    {% else %}
+                        {% if field.errors %}
+                            {{ field }}
+                        {% else %}
+                            {{ field }}
+                        {% endif %}
+                    {% endif %}
+                    
+                    {% if field.help_text %}
+                        <small style="color: #6B5D4D; display: block; margin-top: 4px;">{{ field.help_text|safe }}</small>
+                    {% endif %}
+                    
+                    {% if field.errors %}
+                        <div style="color: #B00020; font-size: 13px; margin-top: 4px;">
+                            {% for error in field.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <style>
+                input[type="text"],
+                input[type="email"],
+                input[type="date"],
+                input[type="number"],
+                select,
+                textarea {
+                    width: 100%;
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    box-sizing: border-box;
+                    font-family: Arial, sans-serif;
+                    font-size: 14px;
+                }
+                
+                textarea {
+                    resize: vertical;
+                    min-height: 100px;
+                }
+                
+                input[type="file"] {
+                    padding: 6px;
+                }
+            </style>
+
+            <div style="display: flex; gap: 10px; margin-top: 24px;">
+                <button type="submit" style="background-color: #4CAF50; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 14px;">✓ Add Book</button>
+                <a href="{% url 'book-list-page' %}" style="background-color: #ddd; color: #333; padding: 12px 24px; border: none; border-radius: 4px; text-decoration: none; font-weight: bold; display: inline-block; font-size: 14px;">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+    <p class="footer-link" style="margin-top: 24px; text-align: center;"><a href="{% url 'book-list-page' %}">← Back to Book List</a></p>
 {% endblock %}
